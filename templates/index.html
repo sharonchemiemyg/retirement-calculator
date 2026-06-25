@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Replacement Ratio Calculator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="header">
+        <h1>💰 Retirement Calculator</h1>
+        <p>Income Replacement Ratio (IRR) Tool</p>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <!-- Input Form -->
+            <div class="card">
+                <h2>📋 Your Information</h2>
+                <form id="calculatorForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Current Age *</label>
+                            <input type="number" id="age" name="age" required min="18" max="120">
+                        </div>
+                        <div class="form-group">
+                            <label for="retirement_age">Retirement Age *</label>
+                            <input type="number" id="retirement_age" name="retirement_age" required min="18" max="120">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="current_salary">Current Annual Salary (R) *</label>
+                            <input type="number" id="current_salary" name="current_salary" required min="0" step="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="monthly_contribution">Monthly Contribution (R) *</label>
+                            <input type="number" id="monthly_contribution" name="monthly_contribution" required min="0" step="100">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="current_fund_balance">Current Fund Balance (R) *</label>
+                            <input type="number" id="current_fund_balance" name="current_fund_balance" required min="0" step="1000">
+                        </div>
+                        <div class="form-group">
+                            <label for="life_expectancy">Life Expectancy (Age)</label>
+                            <input type="number" id="life_expectancy" name="life_expectancy" value="85" min="50" max="120">
+                        </div>
+                    </div>
+
+                    <h3>📊 Assumptions</h3>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annual_investment_return">Annual Investment Return (%) *</label>
+                            <input type="number" id="annual_investment_return" name="annual_investment_return" required min="0" max="30" step="0.01">
+                            <p class="info-text">Expected annual return on investments (e.g., 0.08 for 8%)</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="annual_salary_escalation">Annual Salary Escalation (%) *</label>
+                            <input type="number" id="annual_salary_escalation" name="annual_salary_escalation" required min="0" max="20" step="0.01">
+                            <p class="info-text">Expected annual salary increase (e.g., 0.05 for 5%)</p>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="inflation_rate">Inflation Rate (%) *</label>
+                            <input type="number" id="inflation_rate" name="inflation_rate" required min="0" max="20" step="0.01">
+                            <p class="info-text">Expected annual inflation (e.g., 0.04 for 4%)</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="spouse_age_difference">Spouse Age Difference (years)</label>
+                            <input type="number" id="spouse_age_difference" name="spouse_age_difference" value="3" min="0" max="30">
+                            <p class="info-text">Age difference for spouse pension calculations</p>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Calculate Retirement Plan</button>
+                </form>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" style="display: none;">
+                <div class="card">
+                    <h2>✨ Your Results</h2>
+
+                    <div id="status" class="status"></div>
+
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="label">Income Replacement Ratio</div>
+                            <div class="value" id="irrValue">0%</div>
+                            <p style="font-size: 0.8em; margin-top: 5px;">(Target: 75%)</p>
+                        </div>
+                        <div class="result-card">
+                            <div class="label">Fund at Retirement</div>
+                            <div class="value" id="fundValue">R0</div>
+                            <p style="font-size: 0.8em; margin-top: 5px;">Total accumulated</p>
+                        </div>
+                        <div class="result-card">
+                            <div class="label">Annual Retirement Income</div>
+                            <div class="value" id="incomeValue">R0</div>
+                            <p style="font-size: 0.8em; margin-top: 5px;">Using 4% rule</p>
+                        </div>
+                        <div class="result-card">
+                            <div class="label">Spouse Pension (50%)</div>
+                            <div class="value" id="spouseValue">R0</div>
+                            <p style="font-size: 0.8em; margin-top: 5px;">After your passing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projections Table -->
+        <div id="resultsSection" style="display: none;">
+            <div class="card results">
+                <h2>📈 Year-by-Year Projections</h2>
+                <table class="projections-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Age</th>
+                            <th>Fund Balance</th>
+                            <th>Phase</th>
+                            <th>Annual Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Loading and Error -->
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Calculating your retirement plan...</p>
+        </div>
+
+        <div class="error-message"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
